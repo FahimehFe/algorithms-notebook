@@ -1,0 +1,60 @@
+"""
+128. Longest Consecutive Sequence
+https://leetcode.com/problems/longest-consecutive-sequence/
+
+"""
+from typing import List
+
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        seen = set()
+
+        for i in range(len(nums)):
+            if nums[i] not in seen:
+                seen.add(nums[i])
+
+        result = 0
+
+        for element in seen:
+            if element - 1 not in seen:
+                length = 1
+                while (element + length in seen):
+                    length += 1
+                if (length > result):
+                    result = length
+
+        return result
+
+
+if __name__ == "__main__":
+    s = Solution()
+
+    assert s.longestConsecutive([100, 4, 200, 1, 3, 2]) == 4
+    assert s.longestConsecutive([0, 3, 7, 2, 5, 8, 4, 6, 0, 1]) == 9
+    assert s.longestConsecutive([]) == 0                 # edge: empty
+    assert s.longestConsecutive([1]) == 1                # edge: single
+    assert s.longestConsecutive([1, 1, 1]) == 1          # edge: all duplicates
+    assert s.longestConsecutive([-3, -2, -1, 5]) == 3    # edge: negatives
+    assert s.longestConsecutive([9, 8, 7, 6]) == 4       # edge: descending input
+    assert s.longestConsecutive([1, 2, 3, 1000000]) == 3  # edge: huge gap
+    assert s.longestConsecutive([16, 31, 14, 10, 35, 35, 4, 32, 10, 1, 10, 33]) == 3
+
+    # Property test against a simple reference: this is how mistake 3 was found,
+    # after five hand-written cases all passed.
+    import random
+
+    def reference(nums):
+        uniq = sorted(set(nums))
+        best = run = 0
+        for i, x in enumerate(uniq):
+            run = run + 1 if i and x == uniq[i - 1] + 1 else 1
+            best = max(best, run)
+        return best
+
+    random.seed(0)
+    for _ in range(5000):
+        case = [random.randint(0, 40) for _ in range(random.randint(0, 12))]
+        assert s.longestConsecutive(case) == reference(case), case
+
+    print("all passed")
