@@ -1,11 +1,5 @@
 # Hash Maps & Sets
 
-> **The sentence to say in an interview:**
-> *I needed repeated membership queries, so I traded O(n) space for O(1) lookup and turned an
-> O(n²) scan into O(n).*
-
----
-
 ## Hash Maps
 
 Imagine you are looking for your doctor's office number in your contacts. You type the name in and
